@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -42,7 +43,12 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun MessageCard(msg: Message) {
-        Row(modifier = Modifier.padding(all = 8.dp)) {
+        var isExpanded by rememberSaveable { mutableStateOf(false) }
+        val surfaceColor: Color by animateColorAsState(
+            if (isExpanded) MaterialTheme.colors.primary else MaterialTheme.colors.surface,
+        )
+        Row(modifier = Modifier.padding(all = 8.dp)
+            .background(color = surfaceColor)) {
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
                 contentDescription = "Contact profile picture",
@@ -52,10 +58,6 @@ class MainActivity : ComponentActivity() {
                     .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape)
             )
 
-            var isExpanded by rememberSaveable { mutableStateOf(false) }
-            val surfaceColor: Color by animateColorAsState(
-                if (isExpanded) MaterialTheme.colors.primary else MaterialTheme.colors.surface,
-            )
             Spacer(modifier = Modifier.width(8.dp))
             Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
                 Text(
