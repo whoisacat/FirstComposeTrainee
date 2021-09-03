@@ -2,6 +2,7 @@ package com.example.compose_example
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
@@ -16,6 +17,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -23,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.compose_example.ui.theme.ComposeExampleTheme
+import kotlinx.parcelize.Parcelize
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +37,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    data class Message(val author: String, val body: String)
+    @Parcelize
+    data class Message(val author: String, val body: String): Parcelable
 
     @Composable
     fun MessageCard(msg: Message) {
@@ -48,7 +52,7 @@ class MainActivity : ComponentActivity() {
                     .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape)
             )
 
-            var isExpanded by remember { mutableStateOf(false) }
+            var isExpanded by rememberSaveable { mutableStateOf(false) }
             val surfaceColor: Color by animateColorAsState(
                 if (isExpanded) MaterialTheme.colors.primary else MaterialTheme.colors.surface,
             )
